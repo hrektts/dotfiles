@@ -1,0 +1,6 @@
+*~
+.emacs.d/elpa/
+.emacs.d/ido.last
+*.dat
+.zsh/.histfile
+.zsh/.zcompdump
