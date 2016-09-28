@@ -4,18 +4,45 @@ umask 022
 ## Keybindings
 bindkey -e
 
+## Paths
+typeset -U cdpath CDPATH
+
+typeset -U fpath FPATH
+case $OSTYPE in
+    darwin* )
+        if type brew > /dev/null 2>&1; then
+            fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
+        fi
+        ;;
+    * )
+        ;;
+esac
+fpath=(
+    /usr/local/share/zsh-completions(N-/)
+    $fpath
+)
+
+typeset -U manpath MANPATH
+manpath=(
+    # for coreutils
+    /usr/local/opt/coreutils/libexec/gnuman(N-/)
+    # for system
+    /usr/local/man(N-/)
+    /usr/local/share/man(N-/)
+    /usr/share/man(N-/)
+    $manpath
+)
+
 # Sets the tty erase character to whatever is specified as the backspace code
 # in the terminfo database
-if [ "$PS1" ]; then
-    if [ -x /usr/bin/tput ]; then
+if [ -x /usr/bin/tput ]; then
+    # We can't do this with "dumb" terminal
+    if [ "x$(tput kbs)" != "x" ]; then
+        stty erase $(tput kbs)
+    elif [ -x /usr/bin/wc ]; then
         # We can't do this with "dumb" terminal
-        if [ "x$(tput kbs)" != "x" ]; then
+        if [ "$(tput kbs | wc -c)" -gt 0 ]; then
             stty erase $(tput kbs)
-        elif [ -x /usr/bin/wc ]; then
-            # We can't do this with "dumb" terminal
-            if [ "$(tput kbs | wc -c)" -gt 0 ]; then
-                stty erase $(tput kbs)
-            fi
         fi
     fi
 fi
@@ -30,19 +57,6 @@ if [ -f ~/.dircolors ]; then
 fi
 
 ## Completion
-case $OSTYPE in
-    darwin* )
-        if [ -x /usr/local/share/zsh-completions ]; then
-            fpath=(/usr/local/share/zsh-completions $fpath)
-        fi
-        if type brew > /dev/null 2>&1; then
-            fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
-        fi
-        ;;
-    * )
-        ;;
-esac
-
 autoload -Uz compinit; compinit
 setopt always_to_end
 setopt auto_list
@@ -92,7 +106,7 @@ vcs_info_wrapper() {
         echo "%{$fg[grey]%}${vcs_info_msg_0_}%{$reset_color%}$del"
     fi
 }
-PROMPT='%n@%m:$(vcs_info_wrapper)$ '
+PROMPT='%n@%m:$(vcs_info_wrapper)%# '
 RPROMPT='%~'
 
 ## Aliases
@@ -105,36 +119,59 @@ set -o noclobber
 # Listing, directories, and motion
 alias cl="clear"
 alias du="du -ch --max-depth=1"
-alias l="ls -CF --color=auto"
-alias la="ls -AF --color=auto"
-alias ll="ls -alrtF --color=auto"
-alias ls="ls -CF --color=auto"
+
+maybe_ls() {
+    if type /usr/local/opt/coreutils/libexec/gnubin/ls > /dev/null 2>&1; then
+        /usr/local/opt/coreutils/libexec/gnubin/ls $@
+    else
+        ls $@
+    fi
+}
+alias l="maybe_ls -CF --color=auto"
+alias la="maybe_ls -AF --color=auto"
+alias ll="maybe_ls -alrtF --color=auto"
+alias ls="maybe_ls -CF --color=auto"
+
 alias m="less"
+
 alias ..="cd .."
 alias ...="cd ..;cd .."
+
 alias md="mkdir"
+
 alias treeacl="tree -A -C -L 2"
 
-# grep options
-alias grep="grep --color=auto"
+# find
+if type /usr/local/opt/findutils/libexec/gnubin/find > /dev/null 2>&1; then
+    alias find="/usr/local/opt/findutils/libexec/gnubin/find"
+fi
+
+# grep
+if type ggrep > /dev/null 2>&1; then
+    alias grep="ggrep --color=auto"
+else
+    alias grep="grep --color=auto"
+fi
 export GREP_COLORS="1;31" # green for matches
 
-if [ $(uname) = "Darwin" ]; then
-    if type gfind > /dev/null 2>&1; then
-        alias find="gfind"
-    fi
-    if type gxargs > /dev/null 2>&1; then
-        alias xargs="gxargs"
-    fi
-    if type gtar > /dev/null 2>&1; then
-        alias tar="gtar"
-    fi
-    if type gwhich > /dev/null 2>&1; then
-        alias which="gwhich"
-    fi
-    if type ggrep > /dev/null 2>&1; then
-        alias grep="ggrep --color=auto"
-    fi
+# sort
+if type /usr/local/opt/coreutils/libexec/gnubin/sort > /dev/null 2>&1; then
+    alias sort="/usr/local/opt/coreutils/libexec/gnubin/sort"
+fi
+
+# tar
+if type /usr/local/opt/gnu-tar/libexec/gnubin/tar > /dev/null 2>&1; then
+    alias tar="/usr/local/opt/gnu-tar/libexec/gnubin/tar"
+fi
+
+# which
+if type /usr/local/opt/gnu-which/bin/gwhich > /dev/null 2>&1; then
+    alias which="/usr/local/opt/gnu-which/bin/gwhich"
+fi
+
+# xargs
+if type /usr/local/opt/findutils/libexec/gnubin/xargs -h > /dev/null 2>&1; then
+    alias xargs="/usr/local/opt/findutils/libexec/gnubin/xargs"
 fi
 
 # Text and editor commands
