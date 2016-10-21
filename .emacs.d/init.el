@@ -27,6 +27,7 @@
                     bind-key
                     column-marker
                     dash
+                    dockerfile-mode
                     drag-stuff
                     epl
                     exec-path-from-shell
