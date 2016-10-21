@@ -167,6 +167,11 @@
 (custom-set-faces (if (not window-system) '(default ((t (:background "nil"))))))
 (load-theme 'solarized-dark t)
 
+;; ---------------------
+;; -- Syntax checking --
+;; ---------------------
+(add-hook 'after-init-hook #'global-flycheck-mode)
+
 ;; ------------
 ;; -- Macros --
 ;; ------------
