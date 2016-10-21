@@ -164,7 +164,7 @@
 ;;------------
 ;;-- Themes --
 ;;------------
-
+(custom-set-faces (if (not window-system) '(default ((t (:background "nil"))))))
 (load-theme 'solarized-dark t)
 
 ;; ------------
