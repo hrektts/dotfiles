@@ -21,8 +21,7 @@
           (setq refreshed t))
         (package-install pack)))))
 
-(install-packages '(let-alist
-                    anzu
+(install-packages '(anzu
                     auto-complete
                     bind-key
                     column-marker
@@ -48,6 +47,7 @@
                     ido-ubiquitous
                     jade-mode
                     js2-mode
+                    let-alist
                     magit
                     markdown-mode
                     multiple-cursors
@@ -124,9 +124,6 @@
 (ido-mode t)
 (ido-ubiquitous-mode t)
 (setq ido-enable-flex-matching t)
-
-;; parentheses
-(show-paren-mode t)
 
 ;; undo tree
 (require 'undo-tree)
@@ -235,11 +232,5 @@
 (add-to-list 'auto-mode-alist '("\\.lhs$" . literate-haskell-mode))
 (add-to-list 'auto-mode-alist '("\\.cabal\\'" . haskell-cabal-mode))
 (add-hook 'haskell-mode-hook 'turn-on-haskell-indent)
-(custom-set-variables
- ;; custom-set-variables was added by Custom.
- ;; If you edit it by hand, you could mess it up, so be careful.
- ;; Your init file should contain only one such instance.
- ;; If there is more than one, they won't work right.
- '(package-selected-packages
-   (quote
-    (yasnippet yascroll yaml-mode web-mode volatile-highlights use-package undo-tree sws-mode solarized-theme smooth-scrolling smex smartparens rust-mode rainbow-delimiters projectile prodigy powerline popwin nyan-mode multiple-cursors markdown-mode magit js2-mode jade-mode ido-ubiquitous idle-highlight-mode htmlize helm haskell-mode google-c-style gitignore-mode gitconfig-mode git-gutter-fringe git-commit fuzzy flycheck f expand-region exec-path-from-shell epl drag-stuff dash column-marker bind-key auto-complete anzu))))
+
+;;
