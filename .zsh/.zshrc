@@ -201,12 +201,3 @@ export LESSOPEN=$lessopen
 # http://www.gnu.org/software/coreutils/faq/coreutils-faq.html#Sort-does-not-sort-in-normal-order_0021
 unset LANG
 export LC_ALL=POSIX
-
-# pyenv
-if [ -d $HOME/.pyenv ]; then
-    export PYENV_ROOT="$HOME/.pyenv"
-    export PATH=$PYENV_ROOT/bin:$PATH
-fi
-if type pyenv > /dev/null 2>&1; then
-    eval "$(pyenv init -)"
-fi
