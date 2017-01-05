@@ -11,5 +11,9 @@ case $OSTYPE in
         ;;
 
     * )
+        # cargo
+        if [ -d ~/.cargo/bin ]; then
+            path=(~/.cargo/bin(N-/) $path)
+        fi
         ;;
 esac
