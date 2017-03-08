@@ -165,6 +165,13 @@
 (custom-set-faces (if (not window-system) '(default ((t (:background "nil"))))))
 (load-theme 'solarized-dark t)
 
+;; --------------
+;; -- Encoding --
+;; --------------
+(prefer-coding-system 'utf-8)
+(setq coding-system-for-read 'utf-8)
+(setq coding-system-for-write 'utf-8)
+
 ;; ---------------------
 ;; -- Syntax checking --
 ;; ---------------------
