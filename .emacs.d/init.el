@@ -24,7 +24,6 @@
 (install-packages '(anzu
                     auto-complete
                     bind-key
-                    column-marker
                     dash
                     dockerfile-mode
                     drag-stuff
