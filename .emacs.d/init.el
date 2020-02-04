@@ -93,7 +93,7 @@
 
 ;; IME
 (use-package mozc
-  :if (eq system-type 'gnu/linux)
+  :if (and (eq system-type 'gnu/linux) window-system)
   :commands (mozc-mode mozc-handle-event)
   :custom (default-input-method "japanese-mozc")
   :bind (("M-l" . mozc-start)
@@ -139,7 +139,8 @@
   (global-whitespace-mode t))
 
 ;; posframe
-(use-package posframe)
+(use-package posframe
+  :if window-system)
 
 ;; scrolling
 (use-package smooth-scrolling
@@ -248,6 +249,7 @@
     :config (counsel-projectile-mode 1))
   ;; Show ivy frame using posframe
   (use-package ivy-posframe
+    :if window-system
     :init
     (setq ivy-posframe-display-functions-alist
           '((t . ivy-posframe-display-at-frame-center)))
@@ -294,6 +296,7 @@
   :config
   ;; using child frame
   (use-package company-posframe
+    :if window-system
     :init
     (company-posframe-mode 1))
   ;; Show quick tooltip
